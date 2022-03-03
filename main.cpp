@@ -19,9 +19,9 @@ struct Node {
 
 //Stack Variables & Functions
 Node *top = NULL;
-void push(int value);
-void pop();
-void peek();
+void push(int value); //add to stack
+void pop(); //delete latest addition
+void peek(); //view latest addition
 
 //Queue Variables & Functions
 Node *front = NULL;
@@ -35,16 +35,16 @@ bool isQueueEmpty() {
     return false;
   }
 }
-void enqueue(int value);
-void dequeue();
-void showQueueFront();
-void displayQueueWhole();
+void enqueue(int value); //add to queue
+void dequeue(); //delete oldest queue
+void showQueueBack(); //show the oldest queue
+void displayQueueWhole(); //loop through entire queue
 
 int main() {
-  push(1);
-  push(2);
-  pop();
-  peek();
+  enqueue(10);
+  enqueue(15);
+  enqueue(20);
+  displayQueueWhole();
 }
 
 //Stack Functions
@@ -57,7 +57,7 @@ void push (int value) {
 
 void pop() {
   if (top == NULL)
-    cout << "Stack Empty";
+    cout << endl << "Stack Empty";
   else
     {
       Node *ptr = top;
@@ -68,10 +68,10 @@ void pop() {
 
 void peek() {
   if (top == NULL)
-    cout << "Stack Empty";
+    cout << endl << "Stack Empty";
   else
     {
-    cout << "Stack at top: " << top->data;
+    cout << endl << "Stack at top: " << top->data;
     }
 }
 
@@ -108,7 +108,7 @@ void dequeue() {
   }
 }
 
-void showQueueFront() {
+void showQueueBack() {
   if (isQueueEmpty()) {
     cout << "Queue Empty";
   }
@@ -129,3 +129,8 @@ void displayQueueWhole() {
     }
   }
 }
+
+/*Citations
+stack: https://www.youtube.com/watch?v=TCmkquGrmDQ
+queue: https://www.youtube.com/watch?v=Anq11tezBSM
+*/
