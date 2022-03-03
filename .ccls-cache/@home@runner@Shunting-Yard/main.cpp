@@ -9,6 +9,7 @@ Project: Build a Stack & Queue using a Linked List, and a Shunting Yard Algorith
 
 using namespace std;
 
+//Node Builder w/ struct
 /*
 struct Node {
   int data;
@@ -16,8 +17,20 @@ struct Node {
 };
 */
 
+//Stack Variables & Functions
 Node *top = NULL;
+void push(int value);
+void pop();
+void peek();
 
+int main() {
+  push(1);
+  push(2);
+  pop();
+  peek();
+}
+
+//Stack Functions
 void push (int value) {
   Node *ptr = new Node();
   ptr->data = value;
@@ -43,11 +56,4 @@ void peek() {
     {
     cout << "Stack at top: " << top->data;
     }
-}
-
-int main() {
-  push(1);
-  push(2);
-  pop();
-  peek();
 }
