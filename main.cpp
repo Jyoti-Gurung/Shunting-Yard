@@ -5,6 +5,7 @@ Project: Build a Stack & Queue using a Linked List, and a Shunting Yard Algorith
 */
 
 #include <iostream>
+#include <cstring>
 #include "Node.h"
 
 using namespace std;
@@ -12,14 +13,23 @@ using namespace std;
 //Node Builder w/ struct
 /*
 struct Node {
-  int data;
+  char data;
   Node *link;
 };
 */
 
 //Stack Variables & Functions
 Node *top = NULL;
-void push(int value); //add to stack
+
+bool isStackEmpty() {
+  if (top == NULL) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+void push(char value); //add to stack
 void pop(); //delete latest addition
 void peek(); //view latest addition
 
@@ -35,20 +45,25 @@ bool isQueueEmpty() {
     return false;
   }
 }
-void enqueue(int value); //add to queue
+void enqueue(char value); //add to queue
 void dequeue(); //delete oldest queue
 void showQueueBack(); //show the oldest queue
 void displayQueueWhole(); //loop through entire queue
 
+//Shunting Yard
+void postFix();
+void stackToQueue();
+
 int main() {
-  enqueue(10);
-  enqueue(15);
-  enqueue(20);
+  postFix();
   displayQueueWhole();
+  peek();
+  pop();
+  peek();
 }
 
 //Stack Functions
-void push (int value) {
+void push (char value) {
   Node *ptr = new Node();
   ptr->data = value;
   ptr->link = top;
@@ -56,7 +71,7 @@ void push (int value) {
 }
 
 void pop() {
-  if (top == NULL)
+  if (isStackEmpty())
     cout << endl << "Stack Empty";
   else
     {
@@ -67,7 +82,7 @@ void pop() {
 }
 
 void peek() {
-  if (top == NULL)
+  if (isStackEmpty())
     cout << endl << "Stack Empty";
   else
     {
@@ -76,7 +91,7 @@ void peek() {
 }
 
 //Queue Functions
-void enqueue(int value) {
+void enqueue(char value) {
   Node *ptr = new Node();
   ptr->data = value;
   ptr->link = NULL;
@@ -124,10 +139,49 @@ void displayQueueWhole() {
   else {
     Node *ptr = front;
     while (ptr != NULL) {
-      cout << ptr-> data << " ";
+      cout << ptr-> data;
       ptr = ptr->link;
     }
   }
+}
+
+//Shunting Yard
+void postFix() {
+
+  char input[21];
+  for (int i = 0; i < strlen(input); i++) {
+    input[i] = '\0';  
+  }
+  
+  cout << "Infix Math Notation(No Spaces & 20 Chars max):" << endl;
+  cin >> input;
+
+  for (int i = 0; i < strlen(input); i++) {
+    
+    //if it's a digit, add to queue
+    if (isdigit(input[i])) {
+     enqueue(input[i]);
+    }
+
+    //if stack is empty, push operator right away
+    if (!isdigit(input[i]) && isStackEmpty) {
+       push(input[i]); 
+    }
+
+    //for + & - Operators; if stack is not empty
+    if (!isStackEmpty && (input[i] == '+' || input[i] == '-')) {
+     cout << "Cash";
+    }
+    
+  }
+
+  //convert the stack to queue at the end
+  stackToQueue();
+  
+}
+
+void stackToQueue() {
+   
 }
 
 /*Citations

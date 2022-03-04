@@ -5,6 +5,7 @@ Project: Build a Stack & Queue using a Linked List, and a Shunting Yard Algorith
 */
 
 #include <iostream>
+#include <cstring>
 #include "Node.h"
 
 using namespace std;
@@ -19,6 +20,15 @@ struct Node {
 
 //Stack Variables & Functions
 Node *top = NULL;
+
+bool isStackEmpty() {
+  if (top == NULL) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 void push(int value); //add to stack
 void pop(); //delete latest addition
 void peek(); //view latest addition
@@ -40,11 +50,11 @@ void dequeue(); //delete oldest queue
 void showQueueBack(); //show the oldest queue
 void displayQueueWhole(); //loop through entire queue
 
+//Shunting Yard
+void postfix();
+
 int main() {
-  enqueue(10);
-  enqueue(15);
-  enqueue(20);
-  displayQueueWhole();
+  postfix();
 }
 
 //Stack Functions
@@ -56,18 +66,21 @@ void push (int value) {
 }
 
 void pop() {
-  if (top == NULL)
+  if (isStackEmpty())
     cout << endl << "Stack Empty";
   else
     {
       Node *ptr = top;
       top = top -> link;
+      //add to enqueue
+      enqueue();
+      //add to enqueue
       delete(ptr);
     }
 }
 
 void peek() {
-  if (top == NULL)
+  if (isStackEmpty())
     cout << endl << "Stack Empty";
   else
     {
@@ -128,6 +141,39 @@ void displayQueueWhole() {
       ptr = ptr->link;
     }
   }
+}
+
+//Shunting Yard
+void postfix() {
+  char input[21];
+  cout << "Type a *Proper* Math Expression in Infix Notation(no longer than 20, spaces included):" << endl;
+  cin >> input;
+
+  for (int i = 0; i < strlen(input); i++) {
+     if (isdigit(input[i])) {
+       enqueue(input[i]);
+     }
+     else {
+       if (input[i] == '+' || input[i] == 'i') {
+          if (isStackEmpty()) {
+            push(input[i]);
+          }
+          else {
+            
+          }
+       }
+       if (input[i] == '*' || input[i] == '/') {
+         cout << "Cash";
+       }
+       if (input[i] == '^') {
+         
+       }
+       if (input[i] == '(') {
+         
+       }
+     }
+  }
+  
 }
 
 /*Citations

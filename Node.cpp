@@ -7,6 +7,6 @@ using namespace std;
 
 //Constructor
 Node::Node() {
-  int data;
+  char data;
   Node *link;
 }
