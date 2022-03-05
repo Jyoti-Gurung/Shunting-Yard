@@ -6,7 +6,7 @@ using namespace std;
 class Node {
   public:
   Node();
-  int data;
+  char data;
   Node *link;
 
   private:

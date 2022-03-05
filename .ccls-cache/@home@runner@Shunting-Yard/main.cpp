@@ -13,7 +13,7 @@ using namespace std;
 //Node Builder w/ struct
 /*
 struct Node {
-  int data;
+  char data;
   Node *link;
 };
 */
@@ -29,7 +29,7 @@ bool isStackEmpty() {
     return false;
   }
 }
-void push(int value); //add to stack
+void push(char value); //add to stack
 void pop(); //delete latest addition
 void peek(); //view latest addition
 
@@ -45,20 +45,25 @@ bool isQueueEmpty() {
     return false;
   }
 }
-void enqueue(int value); //add to queue
+void enqueue(char value); //add to queue
 void dequeue(); //delete oldest queue
 void showQueueBack(); //show the oldest queue
 void displayQueueWhole(); //loop through entire queue
 
 //Shunting Yard
-void postfix();
+void postFix();
+void stackToQueue();
 
 int main() {
-  postfix();
+  postFix();
+  displayQueueWhole();
+  peek();
+  pop();
+  peek();
 }
 
 //Stack Functions
-void push (int value) {
+void push (char value) {
   Node *ptr = new Node();
   ptr->data = value;
   ptr->link = top;
@@ -72,9 +77,6 @@ void pop() {
     {
       Node *ptr = top;
       top = top -> link;
-      //add to enqueue
-      enqueue();
-      //add to enqueue
       delete(ptr);
     }
 }
@@ -89,7 +91,7 @@ void peek() {
 }
 
 //Queue Functions
-void enqueue(int value) {
+void enqueue(char value) {
   Node *ptr = new Node();
   ptr->data = value;
   ptr->link = NULL;
@@ -137,43 +139,67 @@ void displayQueueWhole() {
   else {
     Node *ptr = front;
     while (ptr != NULL) {
-      cout << ptr-> data << " ";
+      cout << ptr-> data;
       ptr = ptr->link;
     }
   }
 }
 
 //Shunting Yard
-void postfix() {
+void postFix() {
+
   char input[21];
-  cout << "Type a *Proper* Math Expression in Infix Notation(no longer than 20, spaces included):" << endl;
+  for (int i = 0; i < strlen(input); i++) {
+    input[i] = '\0';  
+  }
+  
+  cout << "Infix Math Notation(No Spaces & 20 Chars max):" << endl;
   cin >> input;
 
   for (int i = 0; i < strlen(input); i++) {
-     if (isdigit(input[i])) {
-       enqueue(input[i]);
-     }
-     else {
-       if (input[i] == '+' || input[i] == 'i') {
-          if (isStackEmpty()) {
-            push(input[i]);
-          }
-          else {
-            
-          }
-       }
-       if (input[i] == '*' || input[i] == '/') {
-         cout << "Cash";
-       }
-       if (input[i] == '^') {
-         
-       }
-       if (input[i] == '(') {
-         
-       }
-     }
+    
+    //if it's a digit, add to queue
+    if (isdigit(input[i])) {
+     enqueue(input[i]);
+    }
+
+    //if operator stack is empty, push operator right away
+    if (!isdigit(input[i]) && isStackEmpty()) {
+       push(input[i]); 
+    }
+    //if operator stack is not empty
+    else {
+      //operators + & -
+      if (input[i] == '+' || input[i] == '-') {
+        
+      }
+      //operators * & /
+      if (input[i] == '*' || input[i] == '/') {
+        if (top->data == '+' || top->data == '/') {
+          push(input[i]);
+        }
+        else {
+          
+        }
+      }
+      //operator ^
+      if (input[i] == '^') {
+        push(input[i]);
+      }
+    }
   }
+
+  //convert the stack to queue at the end
+  stackToQueue();
   
+}
+
+void stackToQueue() {
+   if (!isStackEmpty()) {
+     enqueue(top->data);
+     pop();
+     stackToQueue();
+   }
 }
 
 /*Citations
