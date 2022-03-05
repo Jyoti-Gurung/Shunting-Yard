@@ -175,7 +175,22 @@ void postFix() {
         push(input[i]);
       }
     }
-    
+    //for * & / Operators; if stack is not empty
+    else if (input[i] == '*' || input[i] == '/') {
+      if (top->data == '*' || top->data == '/') {
+        enqueue(top->data);
+        pop();
+        push(input[i]);
+      }
+    }
+    //for ^ Operator; if stack is not empty
+    else if (input[i] == '^') {
+      if (top->data == '^') {
+        enqueue(top->data);
+        pop();
+        push(input[i]);
+      }
+    }
   }
 
   //convert the stack to queue at the end
