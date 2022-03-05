@@ -164,13 +164,16 @@ void postFix() {
     }
 
     //if stack is empty, push operator right away
-    if (!isdigit(input[i]) && isStackEmpty) {
+    if (!isdigit(input[i]) && isStackEmpty()) {
        push(input[i]); 
     }
-
     //for + & - Operators; if stack is not empty
-    if (!isStackEmpty && (input[i] == '+' || input[i] == '-')) {
-     cout << "Cash";
+    else if (input[i] == '+' || input[i] == '-') {
+      if (top->data == '+' || top->data == '-') {
+        enqueue(top->data);
+        pop();
+        push(input[i]);
+      }
     }
     
   }
@@ -181,7 +184,10 @@ void postFix() {
 }
 
 void stackToQueue() {
-   
+   if (!isStackEmpty()) {
+     enqueue(top->data);
+     pop();
+   }
 }
 
 /*Citations
