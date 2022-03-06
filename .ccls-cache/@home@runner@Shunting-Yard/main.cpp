@@ -57,9 +57,6 @@ void stackToQueue();
 int main() {
   postFix();
   displayQueueWhole();
-  peek();
-  pop();
-  peek();
 }
 
 //Stack Functions
@@ -163,30 +160,42 @@ void postFix() {
      enqueue(input[i]);
     }
 
-    //if operator stack is empty, push operator right away
+    //if operator stack is empty, push operator          right away
     if (!isdigit(input[i]) && isStackEmpty()) {
        push(input[i]); 
     }
     //if operator stack is not empty
     else {
-      //operators + & -
       if (input[i] == '+' || input[i] == '-') {
-        
-      }
-      //operators * & /
-      if (input[i] == '*' || input[i] == '/') {
-        if (top->data == '+' || top->data == '/') {
+        if (top->data == '+' || top->data == '-') {
+          enqueue(top->data);
+          pop();
           push(input[i]);
         }
-        else {
-          
+        if (top->data == '*' || top->data == '/') {
+          enqueue(top->data);
+          pop();
+          push(input[i]);
         }
       }
-      //operator ^
+      if (input[i] == '*' || input[i] == '/') {
+        if (top->data == '+' || top->data == '-') {
+          enqueue(top->data);
+          pop();
+          push(input[i]);
+        }
+        if (top->data == '*' || top->data == '/') {
+          enqueue(top->data);
+          pop();
+          push(input[i]);
+        }
+      }
       if (input[i] == '^') {
-        push(input[i]);
+      }
+      if (input[i] == '(') {
       }
     }
+      
   }
 
   //convert the stack to queue at the end
