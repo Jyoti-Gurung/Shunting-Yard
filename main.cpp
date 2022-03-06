@@ -53,7 +53,7 @@ void displayQueueWhole(); //loop through entire queue
 //Shunting Yard
 void postFix();
 void stackToQueue();
-void powerWeird();
+void powerWeird(char input);
 
 /*
 MAIN
@@ -183,14 +183,14 @@ void postFix() {
         if (top->data == '*' || top->data ==              '/')    {
           enqueue(top->data);
           pop();
-          if (top->data == '+' || top->data == '-           ') {
+          if (top->data == '+' || top->data == '-') {
             enqueue(top->data);
             pop();
           }
           push(input[i]);
         }
         if (top->data == '^') {
-          powerWeird();
+          powerWeird(input[i]);
           push(input[i]);
         }
       }
@@ -205,6 +205,7 @@ void postFix() {
           push(input[i]);
         }
         if (top->data == '^') {
+          powerWeird(input[i]);
           push(input[i]);
         }
       }
@@ -226,7 +227,7 @@ void postFix() {
 }
 
 //recursion of adding/popping to queue if the top data in operator stack is ^; core dumps if you don't make sure stack is not empty
-void powerWeird() {
+void powerWeird(char input) {
  if (!isStackEmpty() && top->data == '^') {
   enqueue(top->data);
   pop();
@@ -234,11 +235,18 @@ void powerWeird() {
     enqueue(top->data);
     pop();
   }
-  if (top->data == '+' || top->data == '-') {
-    enqueue(top->data);
-    pop();
+  if (input == '+' || input == '-') {
+    if (top->data == '+' || top->data == '-') {
+      enqueue(top->data);
+      pop();
+    }
   }
-  powerWeird();
+  else {
+    if (top->data == '+' || top->data == '-') {
+      push(top->data);
+    }
+  }
+  powerWeird(input);
  }
 }
 
