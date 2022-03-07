@@ -53,7 +53,8 @@ void displayQueueWhole(); //loop through entire queue
 //Shunting Yard
 void postFix();
 void stackToQueue();
-void powerWeird(char input);
+void powerWeird();
+void powerWeird2();
 
 /*
 MAIN
@@ -190,22 +191,23 @@ void postFix() {
           push(input[i]);
         }
         if (top->data == '^') {
-          powerWeird(input[i]);
+          powerWeird();
           push(input[i]);
         }
       }
       
-      if (input[i] == '*' || input[i] == '/') {
-        if (top->data == '+' || top->data == '-')          {
+      if (input[i] == '*' || input[i] == '/')      {
+        if (top->data == '+' || top->data ==
+        '-')          {
           push(input[i]);
         }  
-        else if (top->data == '*' || top->data ==              '/')    {
+        if (top->data == '*' || top->data ==              '/')    {
           enqueue(top->data);
           pop();
           push(input[i]);
         }
         if (top->data == '^') {
-          powerWeird(input[i]);
+          powerWeird2();
           push(input[i]);
         }
       }
@@ -227,26 +229,35 @@ void postFix() {
 }
 
 //recursion of adding/popping to queue if the top data in operator stack is ^; core dumps if you don't make sure stack is not empty
-void powerWeird(char input) {
- if (!isStackEmpty() && top->data == '^') {
+void powerWeird2() {
+ if (!isStackEmpty()) {
   enqueue(top->data);
   pop();
+  if (top->data == '^') {
+    enqueue(top->data);
+    pop();
+  }
   if (top->data == '*' || top->data == '/') {
     enqueue(top->data);
     pop();
   }
-  if (input == '+' || input == '-') {
-    if (top->data == '+' || top->data == '-') {
+  powerWeird();
+ }
+}
+
+void powerWeird() {
+ if (!isStackEmpty()) {
+  enqueue(top->data);
+  pop();
+  if (!isStackEmpty() && (top->data == '*' ||  top->data == '/')) {
+    enqueue(top->data);
+    pop();
+  }
+  if (!isStackEmpty() && (top->data == '+' ||  top->data == '-')) {
       enqueue(top->data);
       pop();
-    }
   }
-  else {
-    if (top->data == '+' || top->data == '-') {
-      push(top->data);
-    }
-  }
-  powerWeird(input);
+  powerWeird();
  }
 }
 

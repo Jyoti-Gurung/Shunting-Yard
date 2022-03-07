@@ -53,7 +53,15 @@ void displayQueueWhole(); //loop through entire queue
 //Shunting Yard
 void postFix();
 void stackToQueue();
+void powerWeird();
 
+/*
+MAIN
+^
+^
+^
+^
+*/
 int main() {
   postFix();
   displayQueueWhole();
@@ -167,33 +175,48 @@ void postFix() {
     //if operator stack is not empty
     else {
       if (input[i] == '+' || input[i] == '-') {
-        if (top->data == '+' || top->data == '-') {
+        if (top->data == '+' || top->data == '-')          {
           enqueue(top->data);
           pop();
           push(input[i]);
         }
-        if (top->data == '*' || top->data == '/') {
+        if (top->data == '*' || top->data ==              '/')    {
           enqueue(top->data);
           pop();
+          if (top->data == '+' || top->data == '-') {
+            enqueue(top->data);
+            pop();
+          }
+          push(input[i]);
+        }
+        if (top->data == '^') {
+          powerWeird();
           push(input[i]);
         }
       }
+      
       if (input[i] == '*' || input[i] == '/') {
-        if (top->data == '+' || top->data == '-') {
+        if (top->data == '+' || top->data == '-')          {
+          push(input[i]);
+        }  
+        else if (top->data == '*' || top->data ==              '/')    {
           enqueue(top->data);
           pop();
           push(input[i]);
         }
-        if (top->data == '*' || top->data == '/') {
-          enqueue(top->data);
-          pop();
+        if (top->data == '^') {
+          powerWeird();
           push(input[i]);
         }
       }
+      
       if (input[i] == '^') {
+        push(input[i]);
       }
+      
       if (input[i] == '(') {
       }
+      
     }
       
   }
@@ -203,12 +226,29 @@ void postFix() {
   
 }
 
+//recursion of adding/popping to queue if the top data in operator stack is ^; core dumps if you don't make sure stack is not empty
+void powerWeird() {
+ if (!isStackEmpty()) {
+  enqueue(top->data);
+  pop();
+  if (!isStackEmpty() && (top->data == '*' || top->data == '/')) {
+    enqueue(top->data);
+    pop();
+  }
+  if (!isStackEmpty() && (top->data == '+' || top->data == '-')) {
+    enqueue(top->data);
+    pop();
+  }
+  powerWeird();
+ }
+}
+
 void stackToQueue() {
-   if (!isStackEmpty()) {
-     enqueue(top->data);
-     pop();
-     stackToQueue();
-   }
+ if (!isStackEmpty()) {
+   enqueue(top->data);
+   pop();
+   stackToQueue();
+ }
 }
 
 /*Citations
