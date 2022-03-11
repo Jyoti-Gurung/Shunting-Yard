@@ -50,11 +50,18 @@ void dequeue(); //delete oldest queue
 void showQueueBack(); //show the oldest queue
 void displayQueueWhole(); //loop through entire queue
 
-//Shunting Yard
+/*
+SHUNTING YARD
+^
+^
+^
+^
+^
+*/
 void postFix();
+void caseParenthesis();
+void caseCheck(char input);
 void stackToQueue();
-void powerWeird();
-void powerWeird2();
 
 /*
 MAIN
@@ -163,104 +170,84 @@ void postFix() {
   cin >> input;
 
   for (int i = 0; i < strlen(input); i++) {
-    
-    //if it's a digit, add to queue
+
+    //if operand; enqueue it
     if (isdigit(input[i])) {
-     enqueue(input[i]);
+      enqueue(input[i]);
     }
 
-    //if operator stack is empty, push operator          right away
+    //if left parenthesis; push it
+    if (input[i] == '(') {
+      push(input[i]);
+    }
+  
+    //if right parenthesis; keep enqueing and popping the stack operator till '(' is found and pop that
+    if (input[i] == ')') {
+      caseParenthesis();
+    }
+  
+    // if not digit and stack is empty; push it
     if (!isdigit(input[i]) && isStackEmpty()) {
        push(input[i]); 
     }
-    //if operator stack is not empty
-    else {
-      if (input[i] == '+' || input[i] == '-') {
-        if (top->data == '+' || top->data == '-')          {
-          enqueue(top->data);
-          pop();
-          push(input[i]);
-        }
-        if (top->data == '*' || top->data ==              '/')    {
-          enqueue(top->data);
-          pop();
-          if (top->data == '+' || top->data == '-') {
-            enqueue(top->data);
-            pop();
-          }
-          push(input[i]);
-        }
-        if (top->data == '^') {
-          powerWeird();
-          push(input[i]);
-        }
-      }
-      
-      if (input[i] == '*' || input[i] == '/')      {
-        if (top->data == '+' || top->data ==
-        '-')          {
-          push(input[i]);
-        }  
-        if (top->data == '*' || top->data ==              '/')    {
-          enqueue(top->data);
-          pop();
-          push(input[i]);
-        }
-        if (top->data == '^') {
-          powerWeird2();
-          push(input[i]);
-        }
-      }
-      
-      if (input[i] == '^') {
-        push(input[i]);
-      }
-      
-      if (input[i] == '(') {
-      }
-      
-    }
-      
+    
   }
 
+    //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
+    caseCheck(input[i]);
+    push(input[i]);
+    
   //convert the stack to queue at the end
   stackToQueue();
   
 }
 
-//recursion of adding/popping to queue if the top data in operator stack is ^; core dumps if you don't make sure stack is not empty
-void powerWeird2() {
- if (!isStackEmpty()) {
-  enqueue(top->data);
-  pop();
-  if (top->data == '^') {
+void caseParenthesis() {
+  if (top->data != '(') {
     enqueue(top->data);
     pop();
+    caseParenthesis();
   }
-  if (top->data == '*' || top->data == '/') {
-    enqueue(top->data);
+  else {
     pop();
   }
-  powerWeird();
- }
 }
 
-void powerWeird() {
- if (!isStackEmpty()) {
-  enqueue(top->data);
-  pop();
-  if (!isStackEmpty() && (top->data == '*' ||  top->data == '/')) {
-    enqueue(top->data);
-    pop();
-  }
-  if (!isStackEmpty() && (top->data == '+' ||  top->data == '-')) {
+void caseCheck(char input) {
+  if (input == '+' || input == '-') {
+    if (top->data == '+' || input == '-') {
       enqueue(top->data);
       pop();
+      caseCheck(input);
+    }
+    else {
+      enqueue(top->data);
+      pop();
+      caseCheck(input);
+    }
   }
-  powerWeird();
- }
+  if (input == '*' || input == '/') {
+    if (top->data == '+' || input == '-') {
+      //push(input[i]); is done outside
+    }
+    if (top->data == '*' || input == '/') {
+      enqueue(top->data);
+      pop();
+      caseCheck(input);
+      //push(input[i]); is done outside
+    }
+    if (top->data == '^') {
+      enqueue(top->data);
+      pop();
+      caseCheck(input);
+      //push(input[i]); is done outside
+    }
+  }
+  if (input == '^') {
+    //push(input[i]); is done outside
+  }
 }
-
+  
 void stackToQueue() {
  if (!isStackEmpty()) {
    enqueue(top->data);

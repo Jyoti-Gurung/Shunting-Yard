@@ -50,10 +50,17 @@ void dequeue(); //delete oldest queue
 void showQueueBack(); //show the oldest queue
 void displayQueueWhole(); //loop through entire queue
 
-//Shunting Yard
+/*
+SHUNTING YARD
+^
+^
+^
+^
+^
+*/
 void postFix();
+bool caseCheck(char input);
 void stackToQueue();
-void powerWeird();
 
 /*
 MAIN
@@ -162,85 +169,17 @@ void postFix() {
   cin >> input;
 
   for (int i = 0; i < strlen(input); i++) {
-    
-    //if it's a digit, add to queue
+
+    //if operand; enqueue it
     if (isdigit(input[i])) {
-     enqueue(input[i]);
+      enqueue(input[i]);
     }
-
-    //if operator stack is empty, push operator          right away
-    if (!isdigit(input[i]) && isStackEmpty()) {
-       push(input[i]); 
-    }
-    //if operator stack is not empty
-    else {
-      if (input[i] == '+' || input[i] == '-') {
-        if (top->data == '+' || top->data == '-')          {
-          enqueue(top->data);
-          pop();
-          push(input[i]);
-        }
-        if (top->data == '*' || top->data ==              '/')    {
-          enqueue(top->data);
-          pop();
-          if (top->data == '+' || top->data == '-') {
-            enqueue(top->data);
-            pop();
-          }
-          push(input[i]);
-        }
-        if (top->data == '^') {
-          powerWeird();
-          push(input[i]);
-        }
-      }
-      
-      if (input[i] == '*' || input[i] == '/') {
-        if (top->data == '+' || top->data == '-')          {
-          push(input[i]);
-        }  
-        else if (top->data == '*' || top->data ==              '/')    {
-          enqueue(top->data);
-          pop();
-          push(input[i]);
-        }
-        if (top->data == '^') {
-          powerWeird();
-          push(input[i]);
-        }
-      }
-      
-      if (input[i] == '^') {
-        push(input[i]);
-      }
-      
-      if (input[i] == '(') {
-      }
-      
-    }
-      
+    
   }
-
+    
   //convert the stack to queue at the end
   stackToQueue();
   
-}
-
-//recursion of adding/popping to queue if the top data in operator stack is ^; core dumps if you don't make sure stack is not empty
-void powerWeird() {
- if (!isStackEmpty()) {
-  enqueue(top->data);
-  pop();
-  if (!isStackEmpty() && (top->data == '*' || top->data == '/')) {
-    enqueue(top->data);
-    pop();
-  }
-  if (!isStackEmpty() && (top->data == '+' || top->data == '-')) {
-    enqueue(top->data);
-    pop();
-  }
-  powerWeird();
- }
 }
 
 void stackToQueue() {
