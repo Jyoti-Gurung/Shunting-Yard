@@ -190,12 +190,12 @@ void postFix() {
     if (!isdigit(input[i]) && isStackEmpty()) {
        push(input[i]); 
     }
-    
-  }
 
     //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
     caseCheck(input[i]);
     push(input[i]);
+    
+  }
     
   //convert the stack to queue at the end
   stackToQueue();
