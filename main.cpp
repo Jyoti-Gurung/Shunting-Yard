@@ -187,13 +187,14 @@ void postFix() {
     }
   
     // if not digit and stack is empty; push it
-    if (!isdigit(input[i]) && isStackEmpty()) {
+    if (!isdigit(input[i]) && isStackEmpty())    {
        push(input[i]); 
     }
-
-    //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
-    caseCheck(input[i]);
-    push(input[i]);
+    else if (!isdigit(input[i]) && input[i] != ')' && input[i] != '(') {
+      //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
+      caseCheck(input[i]);
+      push(input[i]);
+    }
     
   }
     
@@ -208,24 +209,18 @@ void caseParenthesis() {
     pop();
     caseParenthesis();
   }
-  else {
-    pop();
-  }
+  pop();
 }
 
 void caseCheck(char input) {
+  
+  //if input is + or -
   if (input == '+' || input == '-') {
-    if (top->data == '+' || input == '-') {
-      enqueue(top->data);
-      pop();
-      caseCheck(input);
-    }
-    else {
-      enqueue(top->data);
-      pop();
-      caseCheck(input);
-    }
+    enqueue(top->data);
+    pop();
   }
+
+  //if input is * or /
   if (input == '*' || input == '/') {
     if (top->data == '+' || input == '-') {
       //push(input[i]); is done outside
@@ -233,7 +228,6 @@ void caseCheck(char input) {
     if (top->data == '*' || input == '/') {
       enqueue(top->data);
       pop();
-      caseCheck(input);
       //push(input[i]); is done outside
     }
     if (top->data == '^') {
@@ -243,6 +237,8 @@ void caseCheck(char input) {
       //push(input[i]); is done outside
     }
   }
+
+  //if input is ^
   if (input == '^') {
     //push(input[i]); is done outside
   }
