@@ -214,25 +214,28 @@ void caseParenthesis() {
 
 void caseCheck(char input) {
   
-  //if input is + or -
-  if (input == '+' || input == '-') {
+  //if input is + or - & stack is not empty
+  if (!isStackEmpty() && (input == '+' || input == '-')) {
     enqueue(top->data);
     pop();
+    caseCheck(input);
   }
 
-  //if input is * or /
-  if (input == '*' || input == '/') {
+  //if input is * or / & stack is not empty
+  if (!isStackEmpty() && (input == '*' || input == '/')) {
     if (top->data == '+' || input == '-') {
       //push(input[i]); is done outside
     }
     if (top->data == '*' || input == '/') {
       enqueue(top->data);
       pop();
+      caseCheck(input);
       //push(input[i]); is done outside
     }
     if (top->data == '^') {
       enqueue(top->data);
       pop();
+      caseCheck(input);
       //push(input[i]); is done outside
     }
   }

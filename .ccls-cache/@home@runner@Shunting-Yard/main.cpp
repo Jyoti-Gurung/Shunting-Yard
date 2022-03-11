@@ -59,7 +59,8 @@ SHUNTING YARD
 ^
 */
 void postFix();
-bool caseCheck(char input);
+void caseParenthesis();
+void caseCheck(char input);
 void stackToQueue();
 
 /*
@@ -174,6 +175,26 @@ void postFix() {
     if (isdigit(input[i])) {
       enqueue(input[i]);
     }
+
+    //if left parenthesis; push it
+    if (input[i] == '(') {
+      push(input[i]);
+    }
+  
+    //if right parenthesis; keep enqueing and popping the stack operator till '(' is found and pop that
+    if (input[i] == ')') {
+      caseParenthesis();
+    }
+  
+    // if not digit and stack is empty; push it
+    if (!isdigit(input[i]) && isStackEmpty())    {
+       push(input[i]); 
+    }
+    else if (!isdigit(input[i]) && input[i] != ')' && input[i] != '(') {
+      //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
+      caseCheck(input[i]);
+      push(input[i]);
+    }
     
   }
     
@@ -182,6 +203,49 @@ void postFix() {
   
 }
 
+void caseParenthesis() {
+  if (top->data != '(') {
+    enqueue(top->data);
+    pop();
+    caseParenthesis();
+  }
+  pop();
+}
+
+void caseCheck(char input) {
+  
+  //if input is + or - & stack is not empty
+  if (!isStackEmpty() && (input == '+' || input == '-')) {
+    enqueue(top->data);
+    pop();
+    caseCheck(input);
+  }
+
+  //if input is * or / & stack is not empty
+  if (!isStackEmpty() && (input == '*' || input == '/')) {
+    if (top->data == '+' || input == '-') {
+      //push(input[i]); is done outside
+    }
+    if (top->data == '*' || input == '/') {
+      enqueue(top->data);
+      pop();
+      caseCheck(input);
+      //push(input[i]); is done outside
+    }
+    if (top->data == '^') {
+      enqueue(top->data);
+      pop();
+      caseCheck(input);
+      //push(input[i]); is done outside
+    }
+  }
+
+  //if input is ^
+  if (input == '^') {
+    //push(input[i]); is done outside
+  }
+}
+  
 void stackToQueue() {
  if (!isStackEmpty()) {
    enqueue(top->data);
