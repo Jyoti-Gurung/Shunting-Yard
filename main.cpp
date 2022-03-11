@@ -233,7 +233,6 @@ void caseCheck(char input) {
     if (top->data == '^') {
       enqueue(top->data);
       pop();
-      caseCheck(input);
       //push(input[i]); is done outside
     }
   }
