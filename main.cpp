@@ -72,6 +72,7 @@ MAIN
 */
 int main() {
   postFix();
+  stackToQueue();
   displayQueueWhole();
 }
 
@@ -187,8 +188,8 @@ void postFix() {
     }
   
     // if not digit and stack is empty; push it
-    if (!isdigit(input[i]) && isStackEmpty())    {
-       push(input[i]); 
+    if (!isdigit(input[i]) && isStackEmpty() && input[i] != ')' && input[i] != '(')    {
+      push(input[i]); 
     }
     else if (!isdigit(input[i]) && input[i] != ')' && input[i] != '(') {
       //caseCheck(char input) function... enqueue/pop based on lower & higher precedence and left & right assossiatives for same operators
@@ -197,9 +198,6 @@ void postFix() {
     }
     
   }
-    
-  //convert the stack to queue at the end
-  stackToQueue();
   
 }
 
@@ -209,7 +207,9 @@ void caseParenthesis() {
     pop();
     caseParenthesis();
   }
-  pop();
+  if (top->data == '(') {
+    pop();
+  }
 }
 
 void caseCheck(char input) {
